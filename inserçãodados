@@ -1,0 +1,31 @@
+<?php
+header('Content-Type: application/json');
+
+//valida se os campos foram preenchidos 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['dado1'] && $_POST['dado2']) {
+
+
+    $conexao = new mysqli(
+        'www.thyagoquintas.com.br', 
+        'engenharia_51', 
+        'ema', 
+        'engenharia_51', 
+        3306 
+    );
+    $insercao = $conexao->prepare("INSERT INTO dados (dado1, dado2) VALUES (?, ?)");
+    $insercao->bind_param("ss", $_POST['dado1'], $_POST['dado2']);
+
+    echo $insercao->execute() ? '{"sucesso":true}' : '{"erro":"Falha ao inserir os dados"}';
+
+    //fecha tudo 
+    $insercao->close(); 
+    $conexao->close();
+
+} else {
+    echo '{"erro":"Preencha todos os campos"}';
+}
+
+
+
+
+?>
